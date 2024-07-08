@@ -1,0 +1,21 @@
+- npm init -y
+- npm i express ejs pg
+- buat .gitignore -> tulis node_modules di dalamnya
+- buat folder db -> connection, setup, seed
+- connection -> buat koneksi ke database https://node-postgres.com/features/connecting -> masuk ke bagian programmatic (pakai pool)
+- sesuaikan konfigurasi dengan postgres yang terinstall, buat async function untuk melakukan test koneksi
+- module.exports pool apabila koneksi aman
+- setup -> membuat table https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-create-table/
+- require pool dari connection -> seuaikan pembuatan table dengan soal -> mulai dengan pembuatan table yang tidak memiliki foreign key terlebih dahulu
+- seed -> memasukkan data awal apabila dibutuhkan https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-insert-multiple-rows/
+- require pool dari connection -> baca data dari json menggunakan fs sync -> mulai dengan seed table yang tidak memiliki foreign key terlebih dahulu
+- buat app.js untuk konfigurasi express https://expressjs.com/en/starter/hello-world.html -> pembuatan struktur mvc termasuk class untuk instantiate, dan routes untuk membuat modular router (optional)
+- app.js -> set view engine ke ejs, pasang middleware express.urlencoded (extended: true), hubungkan ke routes untuk routernya (optional)
+- di routes -> index.js -> require express Router dan di module.exports
+- buat class-class yang dibutuhkan sesuai dengan table yang ada dan di module.exports
+- isi semua routers yang dibutuhkan di routes->index.js
+- index.js di routes me require Controller
+- Controller me require Model
+- Model me require pool dan class
+- Alur Read routers index.js -> controller -> model (class masing2) -> return output ke controller yang sudah berupa instance, controller me render output ke view (ejs)
+- alur create, update, delete -> index.js -> controller -> memanggil model untuk CUD -> redirect ke salah 1 halaman

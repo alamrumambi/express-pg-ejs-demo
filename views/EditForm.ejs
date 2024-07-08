@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book</title>
+</head>
+<body>
+    <h2>Edit Book</h2>
+    <form action="/books/edit/<%= book.id %>" method="post">
+        <label for="">Name</label><br>
+        <input type="text" name="name" value="<%= book.name %>"><br><br>
+        <label for="">Genre</label><br>
+        <select name="genre" id="">
+            <option value="">-- Pilih Genre --</option>
+            <option <%= book.genre == 'Fiksi'? 'selected': '' %> >Fiksi</option>
+            <option <%= book.genre == 'Non-Fiksi'? 'selected': '' %>>Non-Fiksi</option>
+            <option <%= book.genre == 'Anak-Anak'? 'selected': '' %>>Anak-Anak</option>
+            <option <%= book.genre == 'Komik'? 'selected': '' %>>Komik</option>
+        </select><br><br>
+        <label for="">Stock</label><br>
+        <input type="number" name="stock" value="<%= book.stock %>"><br><br>
+        <select name="AuthorId" id="">
+            <option value="">-- Pilih Author --</option>
+            <% authors.forEach((e) => { %>
+                <option <%= book.AuthorId == e.id? 'selected': '' %> value="<%= e.id %>"><%= e.name %></option>
+            <% }) %>
+        </select><br><br>
+        <button>Submit</button>
+    </form>
+</body>
+</html>
