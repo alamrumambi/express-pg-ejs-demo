@@ -3,6 +3,7 @@ const Controller = require('../controllers/controller');
 const router = require('express').Router();
 
 router.get('/', Controller.readBooks);
+router.get('/authors', Controller.readAuthors);
 router.get('/books/add', Controller.getAddBook);
 router.post('/books/add', Controller.postAddBook);
 router.get('/books/edit/:id', Controller.getEditBook);

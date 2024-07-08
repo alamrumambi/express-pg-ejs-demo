@@ -1,28 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Store</title>
-    <style>
-        table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
-        }
-        
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-        }
-        
-        tr:nth-child(even) {
-          background-color: #dddddd;
-        }
-        </style>
-</head>
+<%- include('./partials/TableStyling', { title: 'Books Data' }) %>
 <body>
+    <%- include('./partials/Navbar') %>
     <h1>Books</h1>
     <a href="/books/add"><button>Add Book</button></a>
     <hr>
@@ -31,6 +9,12 @@
         <button>Cari</button>
     </form>
     <hr>
+    <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+    <% } %>
+    <% if (msg) { %>
+        <p style="color: rgb(0, 179, 255);"><%= msg %></p>
+    <% } %>
     <table>
         <tr>
           <th>Id</th>

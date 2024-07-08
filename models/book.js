@@ -11,6 +11,7 @@ class Book {
     }
 
     async updateStock(param) {
+        if (param == 'decrement' && this.stock == 0) throw {name: 'ValidationError', message: `tidak bisa dibeli lagi, stok sudah habis`};
         const query = `update "Books" set
         stock = $1 
         where id = $2`;
@@ -18,6 +19,7 @@ class Book {
     }
 
     async destroy() {
+        if (this.stock > 0) throw {name: 'ValidationError', message: `tidak bisa dihapus, masih ada stok`};
         const query = `delete from "Books" where id = $1`;
         await pool.query(query, [ this.id ]);
     }
@@ -50,8 +52,9 @@ class Book {
     }
 
     static async create({ name, genre, stock, AuthorId }) {
+        this.validate(name, genre, stock, AuthorId);
         const query = `insert into "Books" (name, genre, stock, "AuthorId") values ($1, $2, $3, $4)`;
-        await pool.query(query, [ name, genre, stock, AuthorId ]);
+        await pool.uery(query, [ name, genre, stock, AuthorId ]);
     }
 
     static async findByPk(id) {
@@ -64,6 +67,7 @@ class Book {
     }
 
     static async update({ name, genre, stock, AuthorId }, id) {
+        this.validate(name, genre, stock, AuthorId);
         const query = `update "Books" set
         name = $1, 
         genre = $2, 
@@ -80,6 +84,21 @@ class Book {
         console.log(query, stock);
         await pool.query(query, [ stock, id ]);
     }
+
+    static validate(name, genre, stock, AuthorId) {
+        const errors = []
+        if (!name) errors.push(`Nama buku tidak boleh kosong!`);
+        else if (name.length < 4) errors.push('Nama buku minimal 4 karakter');
+
+        if (!genre) errors.push(`Harap pilih genre buku!`);
+        if (!stock) errors.push(`stock buku tidak boleh kosong!`);
+        else if (stock < 0) errors.push('Stock tidak boleh kurang dari 0');
+
+        if (!AuthorId) errors.push(`Harap pilih Author terlebih dahulu!`);
+        if (errors.length) throw { name: 'ValidationError', errors };
+    }
+
+
 }
 
 module.exports = Book;

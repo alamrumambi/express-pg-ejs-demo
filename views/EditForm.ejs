@@ -6,7 +6,13 @@
     <title>Edit Book</title>
 </head>
 <body>
+    <%- include('./partials/Navbar') %>
     <h2>Edit Book</h2>
+    <% if (errors) { %>
+        <% errors.split(',').forEach((e) => { %>
+            <p style="color: red;"><%= e %></p>
+        <% }) %>
+    <% } %>
     <form action="/books/edit/<%= book.id %>" method="post">
         <label for="">Name</label><br>
         <input type="text" name="name" value="<%= book.name %>"><br><br>
