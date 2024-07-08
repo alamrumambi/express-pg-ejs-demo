@@ -56,6 +56,7 @@ Buatlah routing dengan menggunakan `ExpressJS` agar dapat melakukan *CRUD operat
 Implementasikan routing `/` dengan membuat halaman `Home` dimana halaman ini menampilkan semua buku yang ada pada table `Books` dalam bentuk list yang terdiri dari kolom **id**, **name**, **genre**, **stock**, **author** (author name), dan **action**.
 
 Pada kolom action terdapat 3 button link yaitu:
+- `edit` akan mengarah ke  `/books/edit/:id`
 - `add` akan mengarah ke  `/books/add/:id`
 - `buy` akan mengarah ke  `/books/buy/:id`
 - `delete` akan mengarah ke `/books/delete/:id`.
