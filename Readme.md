@@ -101,9 +101,9 @@ Apabila berhasil menghapus buku maka halaman akan berpindah ke home atau `/`
 ## Validation
 Buatlah validasi pada **server** untuk fitur `Add` dan `Edit`:
 
-- `name` harus terdiri dari minimal 2 kata (*words*)
+- `name` harus terdiri dari minimal 4 karakter
 - `genre` tidak boleh dikosongkan
-- `stock` harus terdiri dari number diantara 0 - 100
+- `stock` harus terdiri dari number minimal 0
 - `author` tidak boleh dikosongkan
 
 Jika kondisi diatas tidak terpenuhi maka data tidak akan bertambah/berubah dan tampilkan pesan error.
