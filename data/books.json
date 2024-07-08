@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Harry Potter and the Philosopher's Stone",
+        "genre": "Fiksi",
+        "stock": 10,
+        "AuthorId": 1
+    },
+    {
+        "name": "Harry Potter and the Chamber of Secrets",
+        "genre": "Fiksi",
+        "stock": 8,
+        "AuthorId": 1
+    },
+    {
+        "name": "A Game of Thrones",
+        "genre": "Fiksi",
+        "stock": 5,
+        "AuthorId": 2
+    },
+    {
+        "name": "A Clash of Kings",
+        "genre": "Fiksi",
+        "stock": 7,
+        "AuthorId": 2
+    },
+    {
+        "name": "The Hobbit",
+        "genre": "Fiksi",
+        "stock": 12,
+        "AuthorId": 3
+    },
+    {
+        "name": "The Lord of the Rings",
+        "genre": "Fiksi",
+        "stock": 3,
+        "AuthorId": 3
+    },
+    {
+        "name": "Murder on the Orient Express",
+        "genre": "Fiksi",
+        "stock": 15,
+        "AuthorId": 4
+    },
+    {
+        "name": "The ABC Murders",
+        "genre": "Fiksi",
+        "stock": 9,
+        "AuthorId": 4
+    }
+]
