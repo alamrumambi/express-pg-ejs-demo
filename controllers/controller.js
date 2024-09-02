@@ -2,111 +2,84 @@ const Author = require("../models/author");
 const Book = require("../models/book");
 
 class Controller {
-    static async readBooks(req, res) {
-        const { search, error, msg } = req.query;
+    static async read(req, res) {
         try {
-            const data = await Book.findAll(search);
-            // res.send(data);
-            res.render('Home', { data, error, msg });
+            const result = await Book.findAll();
+            res.render('Home', { data: result });
         } catch(err) {
-            res.send(err);
+            res.send(err.message);
         }
     }
 
-    static async readAuthors(req, res) {
+    static async getAdd(req, res) {
         try {
-            const data = await Author.findAll();
-            // res.send(data);
-            res.render('Author', { data });
+            const result = await Author.findAll();
+            // res.send(result);
+            res.render('AddForm', { authors: result });
         } catch(err) {
-            res.send(err);
+            console.error(err);
+            res.send(err.message);
         }
     }
 
-    static async getAddBook(req, res) {
-        const { errors } = req.query;
+    static async postAdd(req, res) {
+        const { name, genre, stock, AuthorId } = req.body;
         try {
-            // console.log(errors);
-            const authors = await Author.findAll();
-            // console.log(authors);
-            // res.send(authors);
-            res.render('AddForm', { authors, errors });
-        } catch(err) {
-            res.send(err);
-        }
-    }
-
-    static async postAddBook(req, res) {
-        try {
-            const { name, genre, stock, AuthorId } = req.body;
-            await Book.create({ name, genre, stock, AuthorId });
+            await Book.create(name, genre, stock, AuthorId);
             res.redirect('/');
         } catch(err) {
-            if (err.name == 'ValidationError') {
-                console.log('masuk validation')
-                return res.redirect(`/books/add?errors=${err.errors}`);
-            }
-            res.send({ name: err.name, message: err.message });
+            res.send(err.message);
         }
     }
 
-    static async getEditBook(req, res) {
+    static async getEdit(req, res) {
         const { id } = req.params;
-        const { errors } = req.query;
         try {
-            const authors = await Author.findAll();
+            const result = await Author.findAll();
             const book = await Book.findByPk(id);
-            // res.send({ authors, book });
-            res.render('EditForm', { authors, book, errors });
+            // res.send({result, book});
+            res.render('EditForm', { authors: result, book });
         } catch(err) {
-            res.send(err);
+            console.error(err);
+            res.send(err.message);
         }
     }
 
-    static async postEditBook(req, res) {
+    static async postEdit(req, res) {
+        const { name, genre, stock, AuthorId } = req.body;
         const { id } = req.params;
         try {
-            const { name, genre, stock, AuthorId } = req.body;
-            await Book.update({ name, genre, stock, AuthorId }, id);
+            await Book.update(name, genre, stock, AuthorId, id);
             res.redirect('/');
         } catch(err) {
-            if (err.name == 'ValidationError') {
-                return res.redirect(`/books/edit/${id}?errors=${err.errors}`);
-            }
-            res.send(err);
+            res.send(err.message);
         }
     }
 
-    static async incrementStock(req, res) {
+    static async addStock(req, res) {
         const { id } = req.params;
         try {
             const book = await Book.findByPk(id);
-            // await Book.updateStock({ stock: book.stock + 1 }, id);
-            // await book.incrementStock();
-            await book.updateStock('increment');
+            // console.log(book);
+            await book.incrementStock();
             res.redirect('/');
         } catch(err) {
-            if (err.name == 'ValidationError') {
-                return res.redirect(`/?error=${err.message}`)
-            }
-            res.send(err);
+            console.error(err);
+            res.send(err.message);
         }
     }
 
-    static async decrementStock(req, res) {
+    static async buyStock(req, res) {
         const { id } = req.params;
         try {
             const book = await Book.findByPk(id);
-            // await Book.updateStock({ stock: book.stock + 1 }, id);
-            // await book.decrementStock();
-            // if (book.stock == 0) throw `tidak bisa dibeli lagi, stok sudah habis`;
-            await book.updateStock('decrement');
+            if (book.stock == 0) throw { message: `Stock habis, jangan coba-coba!!`}
+            // console.log(book);
+            await book.decrementStock();
             res.redirect('/');
         } catch(err) {
-            if (err.name == 'ValidationError') {
-                return res.redirect(`/?error=${err.message}`)
-            }
-            res.send(err);
+            console.error(err);
+            res.send(err.message);
         }
     }
 
@@ -114,14 +87,13 @@ class Controller {
         const { id } = req.params;
         try {
             const book = await Book.findByPk(id);
-            // if (book.stock > 0) throw `tidak bisa dihapus, masih ada stok`;
+            if (book.stock != 0) throw { message: `Stock belum habis, jangan coba-coba dihapus yahhhh!!`}
+            // console.log(book);
             await book.destroy();
-            res.redirect('/?msg=Buku berhasil dihapus');
+            res.redirect('/');
         } catch(err) {
-            if (err.name == 'ValidationError') {
-                return res.redirect(`/?error=${err.message}`)
-            }
-            res.send(err);
+            console.error(err);
+            res.send(err.message);
         }
     }
 }
