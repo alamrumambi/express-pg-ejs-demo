@@ -8,11 +8,12 @@ const pool = new Pool({
   database: 'book-db',
   idleTimeoutMillis: 500
 })
-
+ 
 // async function test() {
 //     try {
 //         console.log(await pool.query('SELECT NOW()'))
 //     } catch(err) {
+//         console.log(`====\nERROR\n====`);
 //         console.error(err);
 //     }
 // }

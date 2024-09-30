@@ -7,9 +7,9 @@ class Author {
     }
 
     static async findAll() {
-        let query = `select * from "Authors"`;
+        const query = `select * from "Authors" a;`
         let { rows } = await pool.query(query);
-        rows = rows.map(({ id, name }) => new Author(id, name))
+        rows = rows.map(({ id, name }) => new Author(id, name));
         return rows;
     }
 }

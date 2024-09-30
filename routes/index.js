@@ -2,7 +2,7 @@ const Controller = require('../controllers/controller');
 
 const router = require('express').Router();
 
-router.get('/', Controller.read);
+router.get('/', Controller.home);
 router.get('/books/add', Controller.getAdd);
 router.post('/books/add', Controller.postAdd);
 router.get('/books/edit/:id', Controller.getEdit);

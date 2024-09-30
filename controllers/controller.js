@@ -2,10 +2,10 @@ const Author = require("../models/author");
 const Book = require("../models/book");
 
 class Controller {
-    static async read(req, res) {
+    static async home(req, res) {
         try {
-            const result = await Book.findAll();
-            res.render('Home', { data: result });
+            const data = await Book.findAll();
+            res.render('Home', { data });
         } catch(err) {
             res.send(err.message);
         }
@@ -13,11 +13,9 @@ class Controller {
 
     static async getAdd(req, res) {
         try {
-            const result = await Author.findAll();
-            // res.send(result);
-            res.render('AddForm', { authors: result });
+            const authors = await Author.findAll();
+            res.render('AddForm', { authors, genres: Book.genres });
         } catch(err) {
-            console.error(err);
             res.send(err.message);
         }
     }
@@ -32,39 +30,12 @@ class Controller {
         }
     }
 
-    static async getEdit(req, res) {
-        const { id } = req.params;
-        try {
-            const result = await Author.findAll();
-            const book = await Book.findByPk(id);
-            // res.send({result, book});
-            res.render('EditForm', { authors: result, book });
-        } catch(err) {
-            console.error(err);
-            res.send(err.message);
-        }
-    }
-
-    static async postEdit(req, res) {
-        const { name, genre, stock, AuthorId } = req.body;
-        const { id } = req.params;
-        try {
-            await Book.update(name, genre, stock, AuthorId, id);
-            res.redirect('/');
-        } catch(err) {
-            res.send(err.message);
-        }
-    }
-
     static async addStock(req, res) {
         const { id } = req.params;
         try {
-            const book = await Book.findByPk(id);
-            // console.log(book);
-            await book.incrementStock();
+            await Book.updateStock(id, '+');
             res.redirect('/');
         } catch(err) {
-            console.error(err);
             res.send(err.message);
         }
     }
@@ -72,13 +43,13 @@ class Controller {
     static async buyStock(req, res) {
         const { id } = req.params;
         try {
-            const book = await Book.findByPk(id);
-            if (book.stock == 0) throw { message: `Stock habis, jangan coba-coba!!`}
-            // console.log(book);
-            await book.decrementStock();
+            // ambil 1 data berdasarkan id, dan cek stock nya
+            // apabila sudah 0, maka langsung throw err
+            const data = await Book.findByPk(id);
+            if (data.stock == 0) throw { message: 'minimum stock is 0' }
+            await Book.updateStock(id, '-');
             res.redirect('/');
         } catch(err) {
-            console.error(err);
             res.send(err.message);
         }
     }
@@ -86,13 +57,33 @@ class Controller {
     static async deleteBook(req, res) {
         const { id } = req.params;
         try {
-            const book = await Book.findByPk(id);
-            if (book.stock != 0) throw { message: `Stock belum habis, jangan coba-coba dihapus yahhhh!!`}
-            // console.log(book);
-            await book.destroy();
+            const data = await Book.findByPk(id);
+            if (data.stock != 0) throw { message: 'stock masih masih banyak pak' }
+            await Book.destroy(id);
             res.redirect('/');
         } catch(err) {
-            console.error(err);
+            res.send(err.message);
+        }
+    }
+
+    static async getEdit(req, res) {
+        const { id } = req.params;
+        try {
+            const authors = await Author.findAll();
+            const book = await Book.findByPk(id);
+            res.render('EditForm', { authors, genres: Book.genres, book });
+        } catch(err) {
+            res.send(err.message);
+        }
+    }
+
+    static async postEdit(req, res) {
+        const { id } = req.params;
+        const { name, genre, stock, AuthorId } = req.body;
+        try {
+            await Book.update(name, genre, stock, AuthorId, id);
+            res.redirect('/');
+        } catch(err) {
             res.send(err.message);
         }
     }
